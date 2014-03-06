@@ -1,0 +1,53 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'application'
+
+sourceCompatibility = 1.7
+version = '1.0'
+applicationName = 'simple gradle'
+mainClassName = 'main.java.SampleMain'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile 'commons-collections:commons-collections:3.2',
+	'org.springframework:spring-context:3.2.4.RELEASE',
+	'org.springframework:spring-orm:3.2.4.RELEASE',
+	'org.hibernate:hibernate-core:4.2.4.Final',
+	'postgresql:postgresql:9.1-901.jdbc4',
+	'com.jolbox:bonecp:0.7.1.RELEASE',
+	'com.jolbox:bonecp-provider:0.7.1.RELEASE',
+	'org.apache.logging.log4j:log4j-api:2.0-beta8',
+	'org.apache.logging.log4j:log4j-core:2.0-beta8',
+	'org.slf4j:slf4j-api:1.7.5',
+	'org.jadira.usertype:usertype.core:3.1.0.CR8',
+	'com.google.api-ads:ads-lib:1.18.1',
+	'com.google.api-ads:dfp-axis:1.19.0',
+	'com.google.http-client:google-http-client-jackson2:1.16.0-rc',
+	'joda-time:joda-time:2.3',
+	'joda-time:joda-time-hibernate:1.3'
+}
+
+sourceSets {
+	main.resources.srcDirs = ['resources']
+	println "Building ................"
+}
+
+task create_dirs << {
+	sourceSets*.resources.srcDirs*.each { it.mkdirs() }
+}
+
+task start(dependsOn: classes) << {
+	javaexec {
+		main = mainClassName
+		classpath = sourceSets.main.runtimeClasspath
+	}
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '1.6'
+}
+	
